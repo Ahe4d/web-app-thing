@@ -5,9 +5,7 @@ var cookieParser = require('cookie-parser');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var lumie = require("lumie");
 
 var app = express();
 
@@ -27,8 +25,12 @@ app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+lumie.load(app, {
+  preURL: "api",
+  verbose: true,
+  ignore: ["*.spec", "*.action"],
+  controllers_path: path.join(__dirname, "controllers")
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
