@@ -1,3 +1,6 @@
+var passport = require('passport');
+require('../../config/passport')(passport);
+
 const postUser = require("./users.post.action");
 const getUser = require("./users.get.action");
 

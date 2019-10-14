@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var User = require('../../models/User');
-var passport = require('passport');
-require('../../config/passport')(passport);
 
 module.exports.getAll = (req, res) => {
   var token = getToken(req.headers);
