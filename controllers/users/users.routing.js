@@ -10,13 +10,15 @@ module.exports = {
     },
     get: {
       action: getUser.getAll,
-      level: 'public'
+      level: 'public',
+      middlewares: [passport.authenticate('jwt', { session: false})]
     }
   },
   '/:id': {
     get: {
       action: getUser.getOne,
-      level: 'public'
+      level: 'public',
+      middlewares: [passport.authenticate('jwt', { session: false})]
     }
   }
 };

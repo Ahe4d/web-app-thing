@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var User = require('../../models/User.js');
+var User = require('../../models/User');
 var passport = require('passport');
 require('../../config/passport')(passport);
 
-router.get('/', passport.authenticate('jwt', { session: false}), function(req, res) {
+module.exports.getAll = (req, res) => {
   var token = getToken(req.headers);
   if (token) {
     User.find(function (err, users) {
@@ -15,14 +15,19 @@ router.get('/', passport.authenticate('jwt', { session: false}), function(req, r
   } else {
     return res.status(403).send({success: false, msg: 'Unauthorized.'});
   }
-});
+};
 
-router.get('/:id', function(req, res, next) {
-  User.findById(req.params.id, function (err, user) {
-    if (err) return next(err);
-    res.json(user);
-  });
-});
+module.exports.getOne = (req, res, next) => {
+  var token = getToken(req.headers);
+  if (token) {
+    User.findById(req.params.id, function (err, user) {
+      if (err) return next(err);
+      res.json(user);
+    });
+  } else {
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+  }
+};
 
 getToken = function (headers) {
   if (headers && headers.authorization) {
