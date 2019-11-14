@@ -39,5 +39,3 @@ getToken = function (headers) {
     return null;
   }
 };
-
-module.exports = router;

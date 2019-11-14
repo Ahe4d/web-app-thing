@@ -2,6 +2,12 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
 var UserSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
+    required: true,
+    default: 0
+  },
   username: {
     type: String,
     unique: true,
@@ -10,20 +16,29 @@ var UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true
   }
+  
 });
 
 UserSchema.pre('save', function (next) {
   var user = this;
+  console.log("saving");
   if (this.isModified('password') || this.isNew) {
     bcrypt.genSalt(10, function (err, salt) {
       if (err) {
         return next(err);
       }
-      bcrypt.hash(user.password, salt, null, function (err, hash) {
+      console.log(salt + "\nwe got da password");
+      bcrypt.hash(user.password, salt, function (err, hash) {
         if (err) {
           return next(err);
         }
+        console.log(hash + "\nhashed?");
         user.password = hash;
         next();
       });

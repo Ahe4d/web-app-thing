@@ -6,6 +6,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var lumie = require("lumie");
+var mongo_express = require('mongo-express/lib/middleware')
+var mongo_express_config = require('./config/mongogui')
 
 var app = express();
 
@@ -25,6 +27,7 @@ app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/mongo_express', mongo_express(mongo_express_config))
 lumie.load(app, {
   preURL: "api",
   verbose: true,
