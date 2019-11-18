@@ -5,9 +5,10 @@ var cookieParser = require('cookie-parser');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var lumie = require("lumie");
-var mongo_express = require('mongo-express/lib/middleware')
-var mongo_express_config = require('./config/mongogui')
+var lumie = require('lumie');
+var mongo_express = require('mongo-express/lib/middleware');
+var mongo_express_config = require('./config/mongogui');
+var fetch = require('node-fetch');
 
 var app = express();
 
@@ -40,7 +41,7 @@ app.get('/', function (req, res, next) {
 });
 
 app.get('/login', function (req, res, next) {
-  res.render('login.ejs', { title: "web-app-thing" })
+  return res.render('login.ejs', { title: "web-app-thing" })
 });
 
 // catch 404 and forward to error handler

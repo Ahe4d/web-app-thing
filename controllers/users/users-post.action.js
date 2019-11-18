@@ -7,9 +7,9 @@ var router = express.Router();
 var User = require("../../models/User");
 
 module.exports.register = (req, res) => {
-  if (!req.body.username || !req.body.password) {
+  if (!req.body.username || !req.body.password)
     res.json({success: false, msg: 'Please pass username and password.'});
-  } else {
+  else {
     var newUser = new User({
       username: req.body.username,
       password: req.body.password,
@@ -17,10 +17,8 @@ module.exports.register = (req, res) => {
     });
     // save the user
     console.log("attempting to save user \"" + newUser.username + "\"")
-    newUser.save(function(err) {
-      if (err) {
-        return res.json({success: false, msg: 'Username already exists.'});
-      }
+    newUser.save(function (err) {
+      if (err) return res.json({success: false, msg: 'Username already exists.'});
       res.json({success: true, msg: 'Successfuly created new user.'});
     });
   }
@@ -29,12 +27,12 @@ module.exports.register = (req, res) => {
 module.exports.login = (req, res) => {
   User.findOne({
     username: req.body.username
-  }, function(err, user) {
+  }, function (err, user) {
     if (err) throw err;
 
-    if (!user) {
+    if (!user)
       res.status(401).send({success: false, msg: 'Authentication failed.'});
-    } else {
+    else {
       // check if password matches
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch && !err) {
@@ -42,9 +40,8 @@ module.exports.login = (req, res) => {
           var token = jwt.sign(user.toJSON(), settings.secret);
           // return the information including token as JSON
           res.json({success: true, token: 'JWT ' + token});
-        } else {
+        } else
           res.status(401).send({success: false, msg: 'Authentication failed.'});
-        }
       });
     }
   });
@@ -53,40 +50,48 @@ module.exports.login = (req, res) => {
 module.exports.delete = (req, res) => {
   var token = getToken(req.headers);
   if (token) {
-    User.findOne({  
-      username: req.body.username
-    }, function(err, user) {
-      if (err) throw err;
-  
-      if (!user || user.rank != "Admin") {
-        res.status(401).send({success: false, msg: 'Authentication failed.'});
-      } else {
+    var rankAuth = getRank(token);
+    rankAuth.then(function (rank) { 
+      if (rank != "Admin")
+        res.status(401).send({success: false, msg: 'Unauthorized.'});
+      else {
         User.deleteOne({
           username: req.body.victim
         }, function (err, victim) {
           if (err) return handleError(err);
-
-          if (!victim) {
+  
+          if (!victim)
             return res.status(304).send({success: false, msg: 'User not found!'});
-          }
-          return res.status(200).send({success: true, msg: 'Deleted user!'});
+          else 
+            return res.status(200).send({success: true, msg: 'Deleted user!'});
         });
       }
-    });
-  } else {
+    })
+    
+  } else
     return res.status(403).send({success: false, msg: 'Unauthorized.'});
-  }
 };
 
 getToken = function (headers) {
   if (headers && headers.authorization) {
     var parted = headers.authorization.split(' ');
-    if (parted.length === 2) {
+    if (parted.length === 2)
       return parted[1];
-    } else {
+    else
       return null;
-    }
-  } else {
+  } else
     return null;
-  }
+};
+
+getRank = function (token) {
+  return new Promise((resolve, reject) => {
+    result = jwt.verify(token, settings.secret)
+    User.findOne({  
+      username: result.username
+    }, function (err, user) {
+      if (err) reject(err);
+
+      resolve(user.rank)
+    });
+  });
 };
