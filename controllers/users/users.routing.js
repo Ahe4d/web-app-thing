@@ -30,5 +30,12 @@ module.exports = {
       level: 'public',
       middlewares: [passport.authenticate('jwt', { session: false})]
     }
+  },
+  '/delete': {
+    post: {
+      action: postUser.delete,
+      level: 'public',
+      middlewares: [passport.authenticate('jwt', { session: false})]
+    }
   }
 };

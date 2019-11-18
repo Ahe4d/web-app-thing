@@ -21,8 +21,12 @@ var UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true
+  },
+  rank: {
+    type: String,
+    required: true,
+    default: "Member"
   }
-  
 });
 
 UserSchema.pre('save', function (next) {

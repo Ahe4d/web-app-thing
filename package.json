@@ -18,6 +18,7 @@
     "mongo-express": "^0.53.0",
     "mongoose": "^5.7.4",
     "morgan": "~1.9.1",
+    "nodemon": "^1.19.4",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "serve-favicon": "^2.5.0"

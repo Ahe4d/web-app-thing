@@ -53,18 +53,22 @@ module.exports.login = (req, res) => {
 module.exports.delete = (req, res) => {
   var token = getToken(req.headers);
   if (token) {
-    User.findOne({
+    User.findOne({  
       username: req.body.username
     }, function(err, user) {
       if (err) throw err;
   
-      if (!user) {
+      if (!user || user.rank != "Admin") {
         res.status(401).send({success: false, msg: 'Authentication failed.'});
       } else {
         User.deleteOne({
-          username: req.body.username
-        }, function (err) {
+          username: req.body.victim
+        }, function (err, victim) {
           if (err) return handleError(err);
+
+          if (!victim) {
+            return res.status(304).send({success: false, msg: 'User not found!'});
+          }
           return res.status(200).send({success: true, msg: 'Deleted user!'});
         });
       }
