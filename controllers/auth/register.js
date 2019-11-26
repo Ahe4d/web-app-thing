@@ -5,7 +5,7 @@ var router = express.Router();
 
 router.post('/register', passport.authenticate('register', { session: false }) , async (req, res, next) => {
   res.json({ 
-    msg: 'Successfully registered!',
+    success: true,
     user: req.user 
   });
 });

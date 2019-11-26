@@ -7,6 +7,8 @@ var logger = require('./logs/logger')
 var bodyParser = require('body-parser');
 var mongo_express = require('mongo-express/lib/middleware');
 var mongo_express_config = require('./config/mongogui');
+var flash = require('express-flash-2');
+var session = require('express-session');
 
 var app = express();
 
@@ -20,9 +22,15 @@ mongoose.connect('mongodb://localhost/web-app-thing', { useNewUrlParser: true, u
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(cookieParser('bruh'));
+app.use(session({
+  secret: 'bruh',
+  resave: true,
+  saveUninitialized:true
+}));
+app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
-app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/mongo_express', mongo_express(mongo_express_config))
@@ -33,15 +41,15 @@ app.use('/mongo_express', mongo_express(mongo_express_config))
 
 /* Controllers */
 try {
-  app.use('/api/auth/login', require('./controllers/auth/login'))
-  app.use('/api/auth/register', require('./controllers/auth/register'))
+  app.use('/api/auth', require('./controllers/auth/login'))
+  app.use('/api/auth', require('./controllers/auth/register'))
   logger.appLogger.info("Loaded controllers!")
 } catch (err) {
   logger.appLogger.error(err)
 }
 
 try {
-  app.use('/', require('./routes/users'))
+  app.use('/', require('./routes/auth'))
 } catch (err) {
   console.log("Error!\n" + err)
 }

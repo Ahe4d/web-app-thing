@@ -10,8 +10,9 @@ router.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => { 
     try {
       if (err || !user) {
-        const error = new Error('An Error occured')
-        return next(error);
+        const error = new Error('An error occured')
+        return res.redirect("")
+        
       }
       req.login(user, { session : false }, async (error) => {
         if (error) return next(error)
@@ -21,7 +22,7 @@ router.post('/login', async (req, res, next) => {
         //Sign the JWT token and populate the payload with the user email and id
         const token = jwt.sign({ user: body }, settings.secret);
         //Send back the token to the user
-        return res.json({ token });
+        return res.json({ success: true, token });
       });
     } catch (error) {
       return next(error);

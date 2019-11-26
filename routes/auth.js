@@ -16,25 +16,20 @@ router.route('/login')
     return res.render('login', { title: 'web-app-thing' });
   })
   .post(function (req, res) {
-    axios.post('http://localhost:3000/api/users/login', {
+    axios.post('http://localhost:3000/api/auth/login', {
       username: req.body.username,
       password: req.body.password
     })
     .then((response) => {
-      console.log(response)
-      if (response.success) 
-        console.log('user authed')
-        console.log(req.user)
+      if (response.success) {
+        res.flash("success", response.msg)
         return res.redirect('/')
+      }
     }, (error) => {
       console.log(error);
+      res.flash("danger", response.msg)
+      return res.redirect('/login')
     });
   })
 
-function loggedIn (req, res, next) {
-  if (req.user)
-    return next(null, true)
-  else
-    res.redirect('/login')
-}
 module.exports = router;
