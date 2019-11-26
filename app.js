@@ -2,7 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var favicon = require('serve-favicon');
+
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var lumie = require('lumie');
@@ -36,13 +36,15 @@ lumie.load(app, {
   controllers_path: path.join(__dirname, "controllers")
 });
 
-app.get('/', function (req, res, next) {
-  res.render('index.ejs', { title: "web-app-thing", user: req.user })
-});
+// app.get('/', function (req, res, next) {
+//   res.render('index.ejs', { title: "web-app-thing", user: req.user })
+// });
 
-app.get('/login', function (req, res, next) {
-  return res.render('login.ejs', { title: "web-app-thing" })
-});
+try {
+  app.use('/', require('./routes/users'))
+} catch (err) {
+  console.log("Error!\n" + err)
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
