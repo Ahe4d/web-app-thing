@@ -8,20 +8,22 @@ module.exports = {
   '/register': {
     post: {
       action: postUser.register,
-      level: 'public'
+      level: 'public',
+      middlewares: [passport.authenticate('register', { session: false })]
     }
   },
   '/login': {
     post: {
       action: postUser.login,
-      level: 'public'
+      level: 'public',
+      middlewares: [passport.authenticate('login', { session: false })]
     }
   },
   '/get/all': {
     get: {
       action: getUser.getAll,
       level: 'public',
-      middlewares: [passport.authenticate('jwt', { session: false})]
+      middlewares: [passport.authenticate('jwt', { session: false })]
     }
   },
   '/get/:id': {

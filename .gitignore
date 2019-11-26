@@ -1,2 +1,10 @@
 node_modules/
 .DS_Store
+logs/api/router-combined.log
+logs/api/router-error.log
+logs/app/express-combined.log
+logs/app/express-error.log
+logs/auth/auth-combined.log
+logs/auth/auth-error.log
+logs/db/db-combined.log
+logs/db/db-error.log

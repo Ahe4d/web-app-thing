@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var fetch = require('node-fetch');
 var axios = require('axios');
 var passport = require('passport');
 var settings = require('../config/settings');
@@ -22,8 +21,10 @@ router.route('/login')
       password: req.body.password
     })
     .then((response) => {
+      console.log(response)
       if (response.success) 
         console.log('user authed')
+        console.log(req.user)
         return res.redirect('/')
     }, (error) => {
       console.log(error);

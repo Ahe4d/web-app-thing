@@ -7,21 +7,7 @@ var router = express.Router();
 var User = require("../../models/User");
 
 module.exports.register = (req, res) => {
-  if (!req.body.username || !req.body.password)
-    res.json({success: false, msg: 'Please pass username and password.'});
-  else {
-    var newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email
-    });
-    // save the user
-    console.log("attempting to save user \"" + newUser.username + "\"")
-    newUser.save(function (err) {
-      if (err) return res.json({success: false, msg: 'Username already exists.'});
-      res.json({success: true, msg: 'Successfuly created new user.'});
-    });
-  }
+  res.json({success: true, msg: 'Successfully created user!', user: req.user});
 };
 
 module.exports.login = (req, res) => {

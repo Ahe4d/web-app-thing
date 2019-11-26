@@ -52,12 +52,12 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-UserSchema.methods.comparePassword = function (passw, cb) {
+UserSchema.methods.comparePassword = async function (passw) {
   bcrypt.compare(passw, this.password, function (err, isMatch) {
     if (err) {
-      return cb(err);
+      return err;
     }
-    cb(null, isMatch);
+    return isMatch;
   });
 };
 
