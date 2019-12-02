@@ -1,0 +1,38 @@
+<!DOCTYPE html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+	<div id="app">
+		<header>
+			<% include ../partials/header %>
+			<style>
+				.alert {
+					margin-bottom: 1rm;
+				}
+			</style>
+			<div class="container my-2"></div>
+		</header>
+
+		<main>
+			<div class="container">
+				<div class="card">
+          <div class="card-header bg-danger text-light text-center">Page Unavailable</div> 
+          <div class="card-body text-center">
+            <img src="img/logo.png" class="img-fluid mt-4 mb-0 text-center">
+            <h3 class="font-light mt-4">404</h3>
+            <p class="mb-0">Try going back:</p>
+            <div class="mt-4">
+              <a href="/" class="btn btn-primary btn-lg">Home ›</a>
+            </div>
+          </div>
+        </div>
+			</div>
+		</main>
+	</div>
+	<footer class="footer">
+		<% include ../partials/footer %>
+	</footer>
+	
+</body>
+</html>

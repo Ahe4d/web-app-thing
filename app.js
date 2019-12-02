@@ -1,8 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
-var favicon = require('serve-favicon');
+var cookieParser = require('cookie-parser');  
 var logger = require('./logs/logger')
 var bodyParser = require('body-parser');
 var mongo_express = require('mongo-express/lib/middleware');
@@ -26,18 +25,26 @@ app.use(cookieParser('bruh'));
 app.use(session({
   secret: 'bruh',
   resave: true,
-  saveUninitialized:true
+  saveUninitialized: true
 }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.use('/mongo_express', mongo_express(mongo_express_config))
 
-// app.get('/', function (req, res, next) {
-//   res.render('index.ejs', { title: "web-app-thing", user: req.user })
-// });
+app.locals = {
+  site: {
+    title: "web-app-thing",
+    description: "Testing",
+    version: "0.1.0-alpha"
+  },
+  author: {
+    name: "Your Name Here",
+    copyright: "2019"
+  }
+}
 
 /* Controllers */
 try {
@@ -56,8 +63,10 @@ try {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log(req.url)
   var err = new Error('Not Found');
   err.status = 404;
+  res.render('errors/404', { title: "Page Unavailable "});
   next(err);
 });
 

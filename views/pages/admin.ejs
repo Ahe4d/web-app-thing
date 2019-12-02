@@ -1,0 +1,48 @@
+<!DOCTYPE html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+	<div id="app">
+		<header>
+			<% include ../partials/header %>
+			<style>
+				.alert {
+					margin-bottom: 1rm;
+				}
+			</style>
+			<div class="container my-2"></div>
+		</header>
+
+		<main class="container">
+      <h3 class="font-weight-light">Admin Panel</h3>
+      <div class="row mt-4">
+        <div class="col-sm-3 col-md-3 col-lg-2">
+          <a href="/admin/bans" class="catalog-card text-danger">
+            <div class="card w-100 mb-4">
+              <div class="card-body text-center">
+                <p><i class="far fa-gavel fa-3x"></i></p>
+                <p class="mb-0 catalog-no-overflow-plz">Bans</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-2">
+          <a href="/admin/users" class="catalog-card text-primary"></a>
+            <div class="card w-100 mb-4">
+              <div class="card-body text-center">
+                <p><i class="far fa-user fa-3x"></i></p>
+                <p class="mb-0 catalog-no-overflow-plz">Users</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+
+  <footer class="footer">
+    <% include ../partials/footer %>
+  </footer>
+    
+</body>
+</html>

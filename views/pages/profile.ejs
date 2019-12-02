@@ -1,0 +1,80 @@
+<!DOCTYPE html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+	<div id="app">
+		<header>
+			<% include ../partials/header %>
+			<style>
+				.alert {
+					margin-bottom: 1rm;
+				}
+			</style>
+			<div class="container my-2"></div>
+		</header>
+
+		<main>
+			<div class="container" id="app">
+				<div class="card mb-4">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-4">
+								<img src="img/logo.png" class="img-fluid my-2" style="display:block;max-width:200px;margin:0 auto">
+							</div><div class="col-md-8">
+								<div class="row">
+									<div class="col-md-6">
+										<h3><%= user.username %></h3> 
+										<p class="mb-xs-2 mb-md-5 text-primary"><strong><%= user.rank %></strong></p> 
+ 										<p><i class="fas fa-id-card"></i> <strong>ID:</strong> <%= user.id %><p></p>
+									</div><div class="col-md-6">
+										<h4>Information</h4>
+										<p><strong><i class="fas fa-gamepad"></i> Testing</strong></p>
+										<p>Testing</p>
+										<hr>
+										<p><strong><i class="fab fa-discord"></i> Testing</strong></p>
+										<p>Testing</p>
+									</div>
+									<script>
+										$(document).ready(function(){
+								    		$('[data-toggle="tooltip"]').tooltip();   
+										});
+
+										function copyTextToClipboard (text) {
+											var textArea = document.createElement("textarea");
+  											textArea.value = text;
+  											document.body.appendChild(textArea);
+  											textArea.focus();
+  											textArea.select();
+									  
+											try {
+												var successful = document.execCommand('copy');
+												var msg = successful ? 'successful' : 'unsuccessful';
+												console.log('Fallback: Copying text command was ' + msg);
+											} catch (err) {
+								 				console.error('Fallback: Oops, unable to copy', err);
+											}
+											document.body.removeChild(textArea);
+										}
+
+										var copyKey = document.querySelector('.js-copy-key');
+										copyKey.addEventListener('click', function(event) {
+  											copyTextToClipboard('hi');
+  											toastNotification("Testing", "success");
+										});
+									</script>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<footer class="footer">
+		<% include ../partials/footer %>
+	</footer>
+	
+</body>
+</html>

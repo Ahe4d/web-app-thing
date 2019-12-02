@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-faded navbar-static-top mb-3">
+	<div class="container">
+		<a class="navbar-brand" href="/">
+			<img src="img/logo.png" class="navbar-brandimg d-inline-block align-top mr-2" alt="<%= site.title %>">	
+			<%= site.title %>
+		</a>
+		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">	
+			<span class="navbar-toggler-icon"></span>	
+		</button>	
+		<div class="collapse navbar-collapse" id="navbar-collapse">	
+			<ul class="nav navbar-nav mr-auto">
+				<% if (typeof user != "undefined") { %>
+					<li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+				<% } %>	
+				<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+			</ul>	
+			<ul class="nav navbar-nav my-2 my-lg-0">
+				<% if (typeof user != "undefined") { %>
+					<li class="nav-item dropdown">
+						<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+							<i class="far fa-user"></i> <%= user.username %>
+						</a>
+						<div class="navbar-nobelium-dropdown dropdown-menu dropdown-menu-right">
+							<a href="/user/settings" class="dropdown-item">
+								<i class="fas fa-wrench"></i> Settings
+							</a> 
+							<a href="/api/auth/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
+								<i class="fas fa-sign-out-alt"></i> Logout
+							</a>
+							<form id="logout-form" action="/api/auth/logout" method="POST" style="display: none;">
+								<input type="hidden">
+							</form>
+						</div>
+					</li>
+				<% } else { %>
+					<li class="nav-item"><a href="/login" class="nav-link">Login</a></li>	
+					<li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
+				<% } %>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<% if (flash.danger) { %>
+	<script>toastNotification("<%= flash.danger %>", "danger");</script>
+<% } else if (flash.success) { %>
+	<script>toastNotification("<%= flash.success %>", "success");</script>
+<% } %>

@@ -1,0 +1,62 @@
+<!DOCTYPE html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+	<div id="app">
+		<header>
+			<% include ../partials/header %>
+			<style>
+				.alert {
+					margin-bottom: 1rm;
+				}
+			</style>
+			<div class="container my-2"></div>
+		</header>
+
+		<main class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2">
+					<div class="alert alert-primary rounded text-center">
+						<i class="fas fa-info"></i> Passwords are hashed with <code>bcrypt</code>.
+					</div>
+					<div class="card">
+						<div class="card-header">
+							Login 
+							<% if (typeof user != "undefined") { %> 
+								hey 
+							<% } %> 
+						</div>
+						<div class="card-body">
+							<form action="/login" method="post">
+								<div class="form-group row">
+									<label for="username" class="col-md-3 col-form-label text-md-right"><i class="fas fa-id-card"></i> Username</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="username" name="username" value="" required autofocus>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="password" class="col-md-3 col-form-label text-md-right"><i class="fas fa-key"></i> Password</label>
+									<div class="col-md-9">
+										<input type="password" class="form-control" id="password" name="password" required>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-md-9 offset-md-3">
+										<button type="submit" class="btn btn-primary">Login</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<footer class="footer">
+		<% include ../partials/footer %>
+	</footer>
+	
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+	<div id="app">
+		<header>
+			<% include ../partials/header %>
+			<style>
+				.alert {
+					margin-bottom: 1rm;
+				}
+			</style>
+			<div class="container my-2"></div>
+		</header>
+
+		<main class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2">
+					<div class="alert alert-primary rounded text-center">
+						<i class="fas fa-info"></i> Passwords are hashed with <code>bcrypt</code>.
+					</div>
+					<div class="card">
+						<div class="card-header">
+							Register
+						</div>
+						<div class="card-body">
+							<form name="loginForm" action="/api/auth/register" onSubmit="return checkPasswordConf()" method="post">
+								<div class="form-group row">
+									<label for="username" class="col-md-3 col-form-label"><i class="fas fa-id-card"></i> Username</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="username" name="username" value="" required autofocus>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="email" class="col-md-3 col-form-label"><i class="fas fa-at"></i> E-mail</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="email" name="email" value="" required autofocus>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="password" class="col-md-3 col-form-label"><i class="fas fa-key"></i> Password</label>
+									<div class="col-md-9">
+										<input type="password" class="form-control" id="password" name="password" required>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="passwordConf" class="col-md-3 col-form-label"><i class="fas fa-key"></i> Password (confirm)</label>
+									<div class="col-md-9">
+										<input type="password" class="form-control" id="passwordConf" name="passwordConf" required>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-md-9 offset-md-3">
+										<button type="submit" class="btn btn-primary">Login</button>
+									</div>
+								</div>
+								<script>
+									function checkPasswordConf (pw, pwc) {
+										if (document.loginForm.password != document.loginForm.passwordConf) {
+											toastNotification("Passwords do not match!", "danger");
+											return false;
+										} else {
+											return true;
+										}
+									}
+								</script>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<footer class="footer">
+		<% include ../partials/footer %>
+	</footer>
+	
+</body>
+</html>
