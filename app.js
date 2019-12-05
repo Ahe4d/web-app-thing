@@ -8,6 +8,7 @@ var mongo_express = require('mongo-express/lib/middleware');
 var mongo_express_config = require('./config/mongogui');
 var flash = require('express-flash-2');
 var session = require('express-session');
+var checky = require('./controllers/user/checky')
 
 var app = express();
 
@@ -50,13 +51,15 @@ app.locals = {
 try {
   app.use('/api/auth', require('./controllers/auth/login'))
   app.use('/api/auth', require('./controllers/auth/register'))
+  app.use('/api/auth', require('./controllers/auth/logout'))
   logger.appLogger.info("Loaded controllers!")
 } catch (err) {
   logger.appLogger.error(err)
 }
 
 try {
-  app.use('/', require('./routes/auth'))
+  app.use('/', require('./routes/main'))
+  app.use('/user', require('./routes/user'))
 } catch (err) {
   console.log("Error!\n" + err)
 }
@@ -66,8 +69,17 @@ app.use(function(req, res, next) {
   console.log(req.url)
   var err = new Error('Not Found');
   err.status = 404;
-  res.render('errors/404', { title: "Page Unavailable "});
+  res.render('errors/404', checky, { title: "Page Unavailable ", user: req.user });
   next(err);
+});
+
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedService') { 
+    var error = new Error('Unauthorized');
+    error.status = 401;
+    res.render('errors/401', checky, { title: "Unauthorized ", user: req.user});
+    next(err);
+  }
 });
 
 // restful api error handler

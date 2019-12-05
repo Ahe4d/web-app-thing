@@ -4,16 +4,16 @@ var axios = require('axios');
 var passport = require('passport');
 var settings = require('../config/settings');
 require('../config/passport')(passport);
+var checky = require('../controllers/user/checky');
 
 /* Index */
-router.get('/', function (req, res, next) {
+router.get('/', checky, function (req, res, next) {
   return res.render('pages/index', { title: 'Home', user: req.user })
 })
 
 /* Login */
 router.route('/login')
-  .get(isLoggedIn, function (req, res, next) {
-    console.log(req)
+  .get(isLoggedIn, checky, function (req, res, next) {
     return res.render('pages/login', { title: 'Login'});
   })
   .post(function (req, res) {
@@ -23,10 +23,9 @@ router.route('/login')
       password: req.body.password
     })
     .then((response) => {
-      console.log(response)
-      if (response.data.success) {
+      if (response.data.token) {
         res.cookie('token', response.data.token)
-        res.flash('success', response.data.msg)
+        res.flash('success', "Successfully logged in!")
         return res.redirect('/')
       }
     }, (error) => {
@@ -38,7 +37,7 @@ router.route('/login')
 
 /* Register */
 router.route('/register')
-  .get(isLoggedIn, function (req, res, next) {
+  .get(isLoggedIn, checky, function (req, res, next) {
     console.log(req)
     return res.render('pages/register', { title: 'Register'});
   })
@@ -51,8 +50,9 @@ router.route('/register')
     })
     .then((response) => {
       console.log(response)
-      if (response.data.success) {
-        res.flash('success', response.data.msg)
+      if (response.token) {
+        console.log(response.token)
+        res.flash('success', "Successfully registered! Welcome to the service!")
         return res.redirect('/')
       }
     }, (error) => {
@@ -62,12 +62,30 @@ router.route('/register')
     });
   })
 
+router.get('/logout', function (req, res, next) {
+  res.flash('success', 'Successfully logged out!');
+  return res.redirect('/')
+})
+
+router.get('/test', passport.authorize('jwt', { session: false, failWithError: true }), function (err, req, res, done) {
+  console.log(req.cookies)
+  console.log("user hit /test")
+  if (err) {
+    console.log("FUCK! Something went wrong.")
+    done(err)
+    return res.json({error: err})
+  }
+  console.log("did we win?")
+  done(null, true)
+  return res.json({success: true})
+})
+
 function isLoggedIn(req, res, next) {
-  if (req.token) {
-     res.flash("You are already logged in!", "danger");
-     return res.redirect("/") 
+  if (!req.cookies.token) {
+    return next();
   } else
-    next();
+    res.flash('danger', 'You are already logged in!');
+    return res.redirect("/") 
 }
 
 module.exports = router;

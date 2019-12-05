@@ -15,7 +15,8 @@ var UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false
   },
   email: {
     type: String,
@@ -58,6 +59,11 @@ UserSchema.methods.comparePassword = async function (password){
   //database matches the one sent. Returns true if it does else false.
   const compare = await bcrypt.compare(password, user.password);
   return compare;
+}
+
+UserSchema.methods.getUser = async function (id) {
+  const user = await mongoose.model('User').findOne({id: id})
+  return user;
 }
 
 module.exports = mongoose.model('User', UserSchema);

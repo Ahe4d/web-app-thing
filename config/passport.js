@@ -8,14 +8,15 @@ var settings = require('../config/settings'); // get settings file
 
 module.exports = function(passport) {
   var opts = {};
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
+  opts.jwtFromRequest = req => req.cookies.token,
   opts.secretOrKey = settings.secret;
 
   passport.use('register', new localStrategy({
     usernameField : 'username',
     passwordField : 'password',
-    emailField: 'email'
-  }, async (username, password, email, done) => {
+    emailField: 'email',
+    passReqToCallback: true
+  }, async (req, username, password, email, done) => {
       try {
         const user = await User.create({ username, password, email });
         return done(null, user);
@@ -26,9 +27,14 @@ module.exports = function(passport) {
 
   passport.use('login', new localStrategy({
     usernameField : 'username',
-    passwordField : 'password'
-  }, async (username, password, done) => {
+    passwordField : 'password',
+    passReqToCallback: true
+  }, async (req, username, password, done) => {
     try {
+
+      if (req.user)
+        return done(null, false, { success: false, msg: 'Already logged in.' });
+      
       const user = await User.findOne({ username });
       if (!user)
         return done(null, false, { success: false, msg: 'Authentication failed.' });
@@ -43,14 +49,15 @@ module.exports = function(passport) {
     }
   }));
 
-  passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.id}, function(err, user) {
-      if (err)
-        return done(err, false);
-      if (user)
-        done(null, user);
-      else
-        done(null, false);
-    });
-  })); 
+  passport.use(new JwtStrategy(Object.assign(opts, {passReqToCallback: true}) , async (req, token, done) => {
+    console.log("user wants to authorize...")
+    try {
+      //Pass the user details to the next middleware
+      console.log(token.user.username, "authorized towards route", req.originalUrl)
+      return done( null, token.user);
+    } catch (error) {
+      res => res.render('pages/401', { title: "Unauthorized "})
+      return done(error);
+    }
+  }));
 };
