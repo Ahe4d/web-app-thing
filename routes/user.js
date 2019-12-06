@@ -4,7 +4,6 @@ var axios = require('axios');
 var passport = require('passport');
 var settings = require('../config/settings');
 require('../config/passport')(passport);
-var checky = require('../controllers/user/checky');
 
 /* User Profile */
 router.get('/profile', passport.authenticate('jwt', { session: false, failWithError: true }), function (err, req, res, next) {

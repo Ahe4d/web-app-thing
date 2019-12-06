@@ -8,7 +8,6 @@ var mongo_express = require('mongo-express/lib/middleware');
 var mongo_express_config = require('./config/mongogui');
 var flash = require('express-flash-2');
 var session = require('express-session');
-var checky = require('./controllers/user/checky')
 
 var app = express();
 
@@ -70,7 +69,7 @@ app.use(function(req, res, next) {
   console.log(req.url)
   var err = new Error('Not Found');
   err.status = 404;
-  res.render('errors/404', checky, { title: "Page Unavailable ", user: req.user });
+  res.render('errors/404', { title: "Page Unavailable ", user: req.user });
   next(err);
 });
 
