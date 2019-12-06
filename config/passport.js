@@ -1,7 +1,8 @@
 var JwtStrategy = require('passport-jwt').Strategy,
   ExtractJwt = require('passport-jwt').ExtractJwt,
   localStrategy = require('passport-local').Strategy,
-  DiscordStrategy = require('@oauth-everything/passport-discord').Strategy;
+  DiscordStrategy = require('@oauth-everything/passport-discord').Strategy,
+  DiscordScope = require('@oauth-everything/passport-discord').Scope;
 
 // load up the user model
 var User = require('../models/User');
@@ -14,10 +15,11 @@ module.exports = function(passport) {
   opts.secretOrKey = settings.secret;
 
   // hack it if you'd like, this application is for testing anyway
+  opts.discord = {};
   opts.discord.clientID = 651839563182112779;
   opts.discord.clientSecret = "ccbkBtHABEmULMoySjmnNSGprOunMMMa";
   opts.discord.callbackURL = "http://localhost:3000/api/auth/discord/callback";
-  opts.discord.scope = [Scope.EMAIL, Scope.GUILDS_JOIN, "webhook.incoming"];
+  opts.discord.scope = [DiscordScope.EMAIL, DiscordScope.GUILDS_JOIN, "webhook.incoming"];
 
   passport.use('register', new localStrategy({
     usernameField : 'username',
