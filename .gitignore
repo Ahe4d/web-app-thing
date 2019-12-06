@@ -8,3 +8,4 @@ logs/auth/auth-combined.log
 logs/auth/auth-error.log
 logs/db/db-combined.log
 logs/db/db-error.log
+web-app-thing.code-workspace
