@@ -9,10 +9,7 @@ var settings = require('../config/settings'); // get settings file
 module.exports = function(passport) {
   var opts = {};
   var token = req => req.cookies.token
-  opts.jwtFromRequest = token;
-  if (typeof token == "undefined")
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT')
-  
+  opts.jwtFromRequest = token;  
   opts.secretOrKey = settings.secret;
 
   passport.use('register', new localStrategy({

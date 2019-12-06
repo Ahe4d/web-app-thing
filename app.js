@@ -70,7 +70,7 @@ app.use(function(req, res, next) {
   console.log(req.url)
   var err = new Error('Not Found');
   err.status = 404;
-  res.render('errors/404', { title: "Page Unavailable", user: req.user });
+  res.status(err.status || 404).render('errors/404', { title: "Page Unavailable", user: req.user });
   next(err);
 });
 
@@ -82,7 +82,8 @@ app.use(function(err, req, res, next) {
       delete err.stack;
   }*/
 
-	res.status(err.statusCode || 500).render('errors/500', { title: "Internal Server Error", user: req.user, err: err});
+  res.status(err.statusCode || 500).render('errors/500', { title: "Internal Server Error", user: req.user, err: err});
+  next(err);
 });
 
 module.exports = app;

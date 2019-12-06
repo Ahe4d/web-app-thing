@@ -66,17 +66,9 @@ router.get('/logout', function (req, res, next) {
   return res.redirect('/')
 })
 
-router.get('/test', passport.authenticate('jwt', { session: false, failWithError: true }), function (err, req, res, done) {
-  console.log(req.cookies)
-  console.log("user hit /test")
-  if (err) {
-    console.log("FUCK! Something went wrong.")
-    done(err)
-    return res.json({error: err})
-  }
-  console.log("did we win?")
-  done(null, true)
-  return res.json({success: true})
+router.get('/test', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function (req, res, done) {
+  if (req.user)
+    return res.json({success: true})
 })
 
 function isLoggedIn(req, res, next) {
