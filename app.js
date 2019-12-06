@@ -38,7 +38,8 @@ app.locals = {
   site: {
     title: "web-app-thing",
     description: "Testing",
-    version: "0.1.0-alpha"
+    version: "0.1.0-alpha",
+    baseurl: "changeme"
   },
   author: {
     name: "Your Name Here",
@@ -51,6 +52,7 @@ try {
   app.use('/api/auth', require('./controllers/auth/login'))
   app.use('/api/auth', require('./controllers/auth/register'))
   app.use('/api/auth', require('./controllers/auth/logout'))
+  app.use('/api/auth', require('./controllers/auth/discord'))
   logger.appLogger.info("Loaded controllers!")
 } catch (err) {
   logger.appLogger.error("Error while loading controllers!\n", err)

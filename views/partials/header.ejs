@@ -24,10 +24,10 @@
 							<a href="/user/settings" class="dropdown-item">
 								<i class="fas fa-wrench"></i> Settings
 							</a> 
-							<a href="/api/auth/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
+							<a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
 								<i class="fas fa-sign-out-alt"></i> Logout
 							</a>
-							<form id="logout-form" action="/api/auth/logout" method="POST" style="display: none;">
+							<form id="logout-form" action="/logout" method="GET" style="display: none;">
 								<input type="hidden">
 							</form>
 						</div>

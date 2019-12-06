@@ -1,6 +1,7 @@
 var JwtStrategy = require('passport-jwt').Strategy,
   ExtractJwt = require('passport-jwt').ExtractJwt,
-  localStrategy = require('passport-local').Strategy;
+  localStrategy = require('passport-local').Strategy,
+  DiscordStrategy = require('@oauth-everything/passport-discord').Strategy;
 
 // load up the user model
 var User = require('../models/User');
@@ -11,6 +12,12 @@ module.exports = function(passport) {
   var token = req => req.cookies.token
   opts.jwtFromRequest = token;  
   opts.secretOrKey = settings.secret;
+
+  // hack it if you'd like, this application is for testing anyway
+  opts.discord.clientID = 651839563182112779;
+  opts.discord.clientSecret = "ccbkBtHABEmULMoySjmnNSGprOunMMMa";
+  opts.discord.callbackURL = "http://localhost:3000/api/auth/discord/callback";
+  opts.discord.scope = [Scope.EMAIL, Scope.GUILDS_JOIN, "webhook.incoming"];
 
   passport.use('register', new localStrategy({
     usernameField : 'username',
@@ -61,4 +68,13 @@ module.exports = function(passport) {
       return done(error);
     }
   }));
+
+  passport.use(new DiscordStrategy(opts.discord, async (accessToken, refreshToken, profile, cb) => {
+    // `profile` will be the user's Discord profile
+    console.log(profile);
+ 
+    // You should use that to create or update their info in your database/etc and then return the user using `cb`
+    cb(null, /* database.createOrUpdateDiscordUser(profile) */)
+  }));
+ 
 };

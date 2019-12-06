@@ -17,7 +17,7 @@ router.route('/login')
   })
   .post(function (req, res) {
     console.log("Posting...")
-    axios.post('http://localhost:3000/api/auth/login', {
+    axios.post(req.hostname + '/api/auth/login', {
       username: req.body.username,
       password: req.body.password
     })
@@ -62,6 +62,12 @@ router.route('/register')
   })
 
 router.get('/logout', function (req, res, next) {
+  if (!req.cookies.token) {
+    res.flash('danger', 'You are not logged in!');
+    return res.redirect('back')
+  }
+  
+  res.clearCookie('token');
   res.flash('success', 'Successfully logged out!');
   return res.redirect('/')
 })
