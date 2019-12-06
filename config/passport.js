@@ -8,7 +8,11 @@ var settings = require('../config/settings'); // get settings file
 
 module.exports = function(passport) {
   var opts = {};
-  opts.jwtFromRequest = req => req.cookies.token,
+  var token = req => req.cookies.token
+  opts.jwtFromRequest = token;
+  if (typeof token == "undefined")
+    opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT')
+  
   opts.secretOrKey = settings.secret;
 
   passport.use('register', new localStrategy({
@@ -49,14 +53,13 @@ module.exports = function(passport) {
     }
   }));
 
-  passport.use(new JwtStrategy(Object.assign(opts, {passReqToCallback: true}) , async (req, token, done) => {
+  passport.use(new JwtStrategy(opts, async (token, done) => {
     console.log("user wants to authorize...")
     try {
       //Pass the user details to the next middleware
-      console.log(token.user.username, "authorized towards route", req.originalUrl)
-      return done( null, token.user);
+      console.log(token.user.username, "authorized towards route")
+      return done(null, token.user);
     } catch (error) {
-      res => res.render('pages/401', { title: "Unauthorized "})
       return done(error);
     }
   }));

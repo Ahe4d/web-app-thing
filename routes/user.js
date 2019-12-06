@@ -7,21 +7,16 @@ require('../config/passport')(passport);
 var checky = require('../controllers/user/checky');
 
 /* User Profile */
-router.get('/profile', passport.authorize('jwt', { session: false, failWithError: true }), function (err, req, res, next) {
+router.get('/profile', passport.authenticate('jwt', { session: false, failWithError: true }), function (err, req, res, next) {
+  console.log("hit profile");
+  console.log('hello passport')
   if (err) {
     next(err)
     return res.render('errors/401', { title: 'Unauthorized', user: req.user})
   }
   next();
+  console.log(err)
   return res.render('pages/profile', { title: 'Profile', user: req.user})
 })
-
-function isLoggedIn(req, res, next) {
-  if (!req.cookies.token) {
-    return next();
-  } else
-    res.flash('danger', 'You are already logged in!');
-    return res.redirect("/") 
-}
 
 module.exports = router;

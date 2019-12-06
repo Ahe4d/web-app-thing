@@ -15,8 +15,7 @@ var UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    select: false
+    required: true
   },
   email: {
     type: String,
@@ -55,6 +54,7 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.comparePassword = async function (password){
   const user = this;
+  console.log(user)
   //Hashes the password sent by the user for login and checks if the hashed password stored in the 
   //database matches the one sent. Returns true if it does else false.
   const compare = await bcrypt.compare(password, user.password);
@@ -62,7 +62,10 @@ UserSchema.methods.comparePassword = async function (password){
 }
 
 UserSchema.methods.getUser = async function (id) {
-  const user = await mongoose.model('User').findOne({id: id})
+  const user = await mongoose.model('User')
+    .findOne({id: id})
+    .select('-password')
+    .populate(user, '-password')
   return user;
 }
 

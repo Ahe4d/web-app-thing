@@ -54,14 +54,15 @@ try {
   app.use('/api/auth', require('./controllers/auth/logout'))
   logger.appLogger.info("Loaded controllers!")
 } catch (err) {
-  logger.appLogger.error(err)
+  logger.appLogger.error("Error while loading controllers!\n", err)
 }
 
 try {
   app.use('/', require('./routes/main'))
   app.use('/user', require('./routes/user'))
+  logger.appLogger.info("Loaded routes!")
 } catch (err) {
-  console.log("Error!\n" + err)
+  logger.appLogger.error("Error while loading routes!\n", err)
 }
 
 // catch 404 and forward to error handler
@@ -73,22 +74,13 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedService') { 
-    var error = new Error('Unauthorized');
-    error.status = 401;
-    res.render('errors/401', checky, { title: "Unauthorized ", user: req.user});
-    next(err);
-  }
-});
-
 // restful api error handler
 app.use(function(err, req, res, next) {
   console.log(err);
 
-  if (req.app.get('env') !== 'development') {
+  /*if (process.env.WEBENV !== 'development') {
       delete err.stack;
-  }
+  }*/
 
 	res.status(err.statusCode || 500).json(err);
 });

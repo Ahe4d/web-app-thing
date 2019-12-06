@@ -4,16 +4,15 @@ var axios = require('axios');
 var passport = require('passport');
 var settings = require('../config/settings');
 require('../config/passport')(passport);
-var checky = require('../controllers/user/checky');
 
 /* Index */
-router.get('/', checky, function (req, res, next) {
+router.get('/', function (req, res, next) {
   return res.render('pages/index', { title: 'Home', user: req.user })
 })
 
 /* Login */
 router.route('/login')
-  .get(isLoggedIn, checky, function (req, res, next) {
+  .get(isLoggedIn, function (req, res, next) {
     return res.render('pages/login', { title: 'Login'});
   })
   .post(function (req, res) {
@@ -23,7 +22,7 @@ router.route('/login')
       password: req.body.password
     })
     .then((response) => {
-      if (response.data.token) {
+      if (response.data.success) {
         res.cookie('token', response.data.token)
         res.flash('success', "Successfully logged in!")
         return res.redirect('/')
@@ -37,7 +36,7 @@ router.route('/login')
 
 /* Register */
 router.route('/register')
-  .get(isLoggedIn, checky, function (req, res, next) {
+  .get(isLoggedIn, function (req, res, next) {
     console.log(req)
     return res.render('pages/register', { title: 'Register'});
   })
@@ -67,7 +66,7 @@ router.get('/logout', function (req, res, next) {
   return res.redirect('/')
 })
 
-router.get('/test', passport.authorize('jwt', { session: false, failWithError: true }), function (err, req, res, done) {
+router.get('/test', passport.authenticate('jwt', { session: false, failWithError: true }), function (err, req, res, done) {
   console.log(req.cookies)
   console.log("user hit /test")
   if (err) {

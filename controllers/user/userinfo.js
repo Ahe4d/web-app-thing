@@ -8,12 +8,11 @@ var User = require("../../models/User");
 
 router.get('/get/:id', async (req, res, next) => {
   passport.authenticate('jwt', {session: false }, async (err, user, info) => { 
-    try {
-      if (user.id == req.params.id || user.rank == "Admin")
-        return res.json(User.getUser(req.params.id))
-    } catch (err) {
-      return next(err)
-    }
+    if (err) return next(err)
+
+    if (user.id == req.params.id || user.rank == "Admin")
+      next();
+      return res.json(User.getUser(req.params.id))
   })
 })
 
