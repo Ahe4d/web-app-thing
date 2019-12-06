@@ -56,6 +56,7 @@ try {
   logger.appLogger.error("Error while loading controllers!\n", err)
 }
 
+/* Routes */
 try {
   app.use('/', require('./routes/main'))
   app.use('/user', require('./routes/user'))
@@ -69,7 +70,7 @@ app.use(function(req, res, next) {
   console.log(req.url)
   var err = new Error('Not Found');
   err.status = 404;
-  res.render('errors/404', { title: "Page Unavailable ", user: req.user });
+  res.render('errors/404', { title: "Page Unavailable", user: req.user });
   next(err);
 });
 
@@ -81,7 +82,7 @@ app.use(function(err, req, res, next) {
       delete err.stack;
   }*/
 
-	res.status(err.statusCode || 500).json(err);
+	res.status(err.statusCode || 500).render('errors/500', { title: "Internal Server Error", user: req.user, err: err});
 });
 
 module.exports = app;

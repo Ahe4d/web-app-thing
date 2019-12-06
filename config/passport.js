@@ -53,11 +53,12 @@ module.exports = function(passport) {
     }
   }));
 
-  passport.use(new JwtStrategy(opts, async (token, done) => {
+  passport.use(new JwtStrategy(Object.assign(opts, {passReqToCallback: true}), async (req, token, done) => {
     console.log("user wants to authorize...")
     try {
       //Pass the user details to the next middleware
-      console.log(token.user.username, "authorized towards route")
+      console.log(token.user.username, "authorized towards route", req.originalUrl)
+      req.user = token.user
       return done(null, token.user);
     } catch (error) {
       return done(error);

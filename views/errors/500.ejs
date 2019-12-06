@@ -1,0 +1,43 @@
+<!DOCTYPE html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+	<% include ../partials/head %>
+</head>
+<body>
+	<div id="app">
+		<header>
+			<% include ../partials/header %>
+			<style>
+				.alert {
+					margin-bottom: 1rm;
+				}
+			</style>
+			<div class="container my-2"></div>
+		</header>
+
+		<main>
+			<div class="container">
+				<div class="card">
+          <div class="card-header bg-danger text-light text-center">Internal Server Error</div> 
+          <div class="card-body text-center">
+            <img src="https://thumbs.gfycat.com/OfficialElectricArgusfish-size_restricted.gif" class="img-fluid mt-4 mb-0 text-center">
+            <h3 class="font-light mt-4">500</h3>
+						<p class="mb-0"><i>If you see Dr. Breen, tell him I said "fuck you!" (and give him this error too)</i></p>
+						<pre class="pre-scrollable">
+							<code>
+								<p class="mb-0"><%= err %></p>
+							</code>
+						</pre>
+            <div class="mt-4">
+              <a href="/" class="btn btn-primary btn-lg">Home ›</a>
+            </div>
+          </div>
+        </div>
+			</div>
+		</main>
+	</div>
+	<footer class="footer">
+		<% include ../partials/footer %>
+	</footer>
+	
+</body>
+</html>
