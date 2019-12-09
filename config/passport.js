@@ -16,7 +16,7 @@ module.exports = function(passport) {
 
   // hack it if you'd like, this application is for testing anyway
   opts.discord = {};
-  opts.discord.clientID = 651839563182112779;
+  opts.discord.clientID = "651839563182112779";
   opts.discord.clientSecret = "ccbkBtHABEmULMoySjmnNSGprOunMMMa";
   opts.discord.callbackURL = "localhost:3000/api/auth/discord/callback";
   opts.discord.scope = [DiscordScope.IDENTIFY, DiscordScope.EMAIL];
