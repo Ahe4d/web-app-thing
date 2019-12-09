@@ -17,7 +17,7 @@ router.route('/login')
   })
   .post(function (req, res) {
     console.log("Posting...")
-    axios.post(req.hostname + '/api/auth/login', {
+    axios.post(req.protocol + "://" + req.get('host') + '/api/auth/login', {
       username: req.body.username,
       password: req.body.password
     })
@@ -42,7 +42,7 @@ router.route('/register')
   })
   .post(function (req, res) {
     console.log("Posting...")
-    axios.post('http://localhost:3000/api/auth/register', {
+    axios.post(req.protocol + "://" + req.get('host') + '/api/auth/register', {
       username: req.body.username,
       email: req.body.email,
       password: req.body.password

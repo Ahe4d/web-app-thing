@@ -21,6 +21,7 @@ mongoose.connect('mongodb://localhost/web-app-thing', { useNewUrlParser: true, u
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
 app.use(cookieParser('bruh'));
 app.use(session({
   secret: 'bruh',
@@ -31,7 +32,6 @@ app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use('/', express.static(path.join(__dirname, 'public')));
-
 app.use('/mongo_express', mongo_express(mongo_express_config))
 
 app.locals = {
