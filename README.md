@@ -3,6 +3,9 @@ Side project for working on a rewrite of Blockauth. Feel free to use as a boiler
 
 ## what have you got
 * Basic Bootstrap website
+* EJS templating (Vue soon?)
+* Customizable logger using Winston
+* Mongo admin panel
 * JWT cookie based auth using Passport
 * Discord OAuth
 
