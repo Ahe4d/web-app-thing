@@ -12,31 +12,22 @@ router.get('/', function (req, res, next) {
 
 /* Login */
 router.route('/login')
-  .get(isLoggedIn, function (req, res, next) {
+  .get(isLoggedInInv, function (req, res, next) {
+    console.log(req)
     return res.render('pages/login', { title: 'Login'});
   })
-  .post(function (req, res) {
-    console.log("Posting...")
-    axios.post(req.protocol + "://" + req.get('host') + '/api/auth/login', {
-      username: req.body.username,
-      password: req.body.password
-    })
-    .then((response) => {
-      if (response.data.success) {
-        res.cookie('token', response.data.token)
-        res.flash('success', "Successfully logged in!")
-        return res.redirect('/')
-      }
-    }, (error) => {
-      console.log(error);
-      res.flash('danger', 'There was an error logging you in!')
-      return res.redirect('/login')
-    });
-  })
+  .post(passport.authenticate('login', 
+  {
+    failWithError: true, 
+    failureRedirect: '/login', 
+    failureFlash: "There was an error logging you in!",
+    successRedirect: '/',
+    successFlash: "Successfully logged in!"
+  }))
 
 /* Register */
 router.route('/register')
-  .get(isLoggedIn, function (req, res, next) {
+  .get(isLoggedInInv, function (req, res, next) {
     console.log(req)
     return res.render('pages/register', { title: 'Register'});
   })
@@ -49,39 +40,47 @@ router.route('/register')
     })
     .then((response) => {
       console.log(response)
-      if (response.token) {
-        console.log(response.token)
-        res.flash('success', "Successfully registered! Welcome to the service!")
+      if (response.data.success) {
+        res.cookie('token', response.data.token)
+        req.flash('success', "Successfully registered! Welcome to the service!")
         return res.redirect('/')
       }
     }, (error) => {
       console.log(error);
-      res.flash('danger', 'There was an error while registering your account!')
+      req.flash('danger', 'There was an error while registering your account!')
       return res.redirect('/register')
     });
   })
 
 router.get('/logout', function (req, res, next) {
-  if (!req.cookies.token) {
-    res.flash('danger', 'You are not logged in!');
-    return res.redirect('back')
-  }
-  
-  res.clearCookie('token');
-  res.flash('success', 'Successfully logged out!');
-  return res.redirect('/')
+  req.logOut()
+  req.flash('success', 'Logged out!');
+  return res.redirect('back') 
 })
 
-router.get('/test', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function (req, res, done) {
-  if (req.user)
-    return res.json({success: true})
+router.get('/test', function (req, res, done) {
+  if (!req.isAuthenticated()) return res.json([req.user, req.session])
+  else return res.send('you are auth lol')
 })
 
-function isLoggedIn(req, res, next) {
-  if (!req.cookies.token) {
+router.get('/test2', isLoggedIn, function (req, res, done) {
+  return res.send('hey')
+})
+
+function isLoggedInInv(req, res, next) {
+  if (!req.user) {
     return next();
   } else
-    res.flash('danger', 'You are already logged in!');
+    req.flash('error', 'You are already logged in!');
+    return res.redirect("/") 
+}
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else
+    req.flash('error', 'You are not logged in!');
+    console.log('user isnt logged in')
     return res.redirect("/") 
 }
 

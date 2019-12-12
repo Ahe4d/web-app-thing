@@ -1,14 +1,15 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');  
+var path = require('path'); 
 var logger = require('./logs/logger')
 var bodyParser = require('body-parser');
 var mongo_express = require('mongo-express/lib/middleware');
 var mongo_express_config = require('./config/mongogui');
-var flash = require('express-flash-2');
+var settings = require('./config/settings');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
-
+var flash = require('connect-flash');
+var passport = require('passport');
 var app = express();
 
 var mongoose = require('mongoose');
@@ -21,14 +22,23 @@ mongoose.connect('mongodb://localhost/web-app-thing', { useNewUrlParser: true, u
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+require('./config/passport')(passport);
 
-app.use(cookieParser('bruh'));
+app.use(cookieParser(settings.cookieSecret));
 app.use(session({
-  secret: 'bruh',
+  key: settings.cookieKey,
+  secret: settings.cookieSecret,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie : { httpOnly: true, secure : false, maxAge : (4 * 60 * 60 * 1000)}
 }));
 app.use(flash());
+app.use(function(req, res, next) {
+  res.locals.flash = req.flash;
+  next();
+});
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -47,6 +57,9 @@ app.locals = {
   }
 }
 
+const flashMessageMiddleware = require('./middleware/flashMessage');
+app.use(flashMessageMiddleware.flashMessage);
+
 /* Controllers */
 try {
   app.use('/api/auth', require('./controllers/auth/login'))
@@ -55,6 +68,7 @@ try {
   app.use('/api/auth', require('./controllers/auth/discord'))
   logger.appLogger.info("Loaded controllers!")
 } catch (err) {
+  console.log(err)
   logger.appLogger.error("Error while loading controllers!\n", err)
 }
 

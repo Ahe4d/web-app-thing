@@ -1,14 +1,15 @@
-var JwtStrategy = require('passport-jwt').Strategy,
-  ExtractJwt = require('passport-jwt').ExtractJwt,
-  localStrategy = require('passport-local').Strategy,
-  DiscordStrategy = require('@oauth-everything/passport-discord').Strategy,
-  DiscordScope = require('@oauth-everything/passport-discord').Scope;
+var passport = require('passport');
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var localStrategy = require('passport-local').Strategy;
+var DiscordStrategy = require('@oauth-everything/passport-discord').Strategy;
+var DiscordScope = require('@oauth-everything/passport-discord').Scope;
 
 // load up the user model
 var User = require('../models/User');
 var settings = require('../config/settings'); // get settings file
 
-module.exports = function(passport) {
+module.exports = (passport) => {
   var opts = {};
   var token = req => req.cookies.token
   opts.jwtFromRequest = token;  
@@ -18,15 +19,24 @@ module.exports = function(passport) {
   opts.discord = {};
   opts.discord.clientID = "651839563182112779";
   opts.discord.clientSecret = "ccbkBtHABEmULMoySjmnNSGprOunMMMa";
-  opts.discord.callbackURL = "localhost:3000/api/auth/discord/callback";
+  opts.discord.callbackURL = "http://localhost:3000/api/auth/discord/callback";
   opts.discord.scope = [DiscordScope.IDENTIFY, DiscordScope.EMAIL];
+
+  passport.serializeUser(function (user, done) {
+    done(null, user._id);
+  });
+
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
 
   passport.use('register', new localStrategy({
     usernameField : 'username',
     passwordField : 'password',
-    emailField: 'email',
-    passReqToCallback: true
-  }, async (req, username, password, email, done) => {
+    emailField: 'email'
+  }, async (username, password, email, done) => {
       try {
         const user = await User.create({ username, password, email });
         return done(null, user);
@@ -37,46 +47,42 @@ module.exports = function(passport) {
 
   passport.use('login', new localStrategy({
     usernameField : 'username',
-    passwordField : 'password',
-    passReqToCallback: true
-  }, async (req, username, password, done) => {
-    try {
-
-      if (req.user)
-        return done(null, false, { success: false, msg: 'Already logged in.' });
-      
+    passwordField : 'password'
+  }, async (username, password, done) => {
+    try {      
       const user = await User.findOne({ username });
       if (!user)
-        return done(null, false, { success: false, msg: 'Authentication failed.' });
+        return done(null, false);
 
       const validate = await user.comparePassword(password);
       if (!validate)
-        return done(null, false, { success: false, msg: 'Authentication failed.' });
+        return done(null, false);
 
-      return done(null, user, { success: true, msg: 'Authenticated successfully!' });
+      return done(null, user);
     } catch (error) {
       return done(error);
     }
   }));
 
-  passport.use(new JwtStrategy(Object.assign(opts, {passReqToCallback: true}), async (req, token, done) => {
-    console.log("user wants to authorize...")
+  passport.use('jwt', new JwtStrategy(opts, async (token, done) => {
     try {
       //Pass the user details to the next middleware
-      console.log(token.user.username, "authorized towards route", req.originalUrl)
-      req.user = token.user
       return done(null, token.user);
     } catch (error) {
       return done(error);
     }
   }));
 
-  passport.use(new DiscordStrategy(opts.discord, async (accessToken, refreshToken, profile, cb) => {
+  passport.use('discord', new DiscordStrategy(Object.assign(opts.discord, {passReqToCallback: true}), async (req, accessToken, refreshToken, profile, done) => {
     // `profile` will be the user's Discord profile
     console.log(profile);
- 
-    // You should use that to create or update their info in your database/etc and then return the user using `cb`
-    cb(null, /* database.createOrUpdateDiscordUser(profile) */)
+    console.log(req.user)
+    
+    const user = await User.findOne({ username: req.user.username });
+
+    const discordauth = await user.associateDiscord(profile)
+    // You should use that to create or update their info in your database/etc and then return the user using `done`
+    done(null, user)
   }));
- 
+
 };

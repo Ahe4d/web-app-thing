@@ -8,7 +8,7 @@ var User = require("../../models/User");
 
 router.post('/login', async (req, res, next) => {
   console.log("hit login")
-  passport.authenticate('login', {session: false }, async (err, user, info) => { 
+  passport.authenticate('login', async (err, user, info) => { 
     try {
       console.log("hello?")
       if (err || !user) {
@@ -17,7 +17,7 @@ router.post('/login', async (req, res, next) => {
         return res.status(401);
       }
       console.log("are we going?")
-      req.login(user, { session : false }, async (error) => {
+      req.logIn(user, async (error) => {
         if (error) return next(error)
         //We don't want to store the sensitive information such as the
         //user password in the token so we pick only the email and id
@@ -26,7 +26,8 @@ router.post('/login', async (req, res, next) => {
         const token = jwt.sign({ user: body }, settings.secret, { expiresIn: 86400 });
         //Send back the token to the user
         console.log("SUCCESS!!!!")
-        return res.json({ success: true, token });
+        console.log(req.user);
+        return res.json({ token, success: true });
       });
     } catch (error) {
       return next(error);

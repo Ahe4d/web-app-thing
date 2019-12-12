@@ -1,3 +1,5 @@
 module.exports = {
-  'secret':'watthing'
+  'secret': 'watthing',
+  'cookieSecret': 'bruh',
+  'cookieKey': 'watSession'
 };

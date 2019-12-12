@@ -41,8 +41,8 @@
 	</div>
 </nav>
 
-<% if (flash.danger) { %>
-	<script>toastNotification("<%= flash.danger %>", "danger");</script>
-<% } else if (flash.success) { %>
-	<script>toastNotification("<%= flash.success %>", "success");</script>
+<% if (errorFlashMessage) { %>
+	<script>toastNotification("<%= errorFlashMessage %>", "danger");</script>
+<% } else if (successFlashMessage) { %>
+	<script>toastNotification("<%= successFlashMessage %>", "success");</script>
 <% } %>

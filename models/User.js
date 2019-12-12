@@ -26,6 +26,12 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: "Member"
+  },
+  discord: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
   }
 });
 
@@ -67,6 +73,13 @@ UserSchema.methods.getUser = async function (id) {
     .select('-password')
     .populate(user, '-password')
   return user;
+}
+
+UserSchema.methods.associateDiscord = async function (disc) {
+  const user = this;
+  user.discord = disc;
+  await user.save();
+  return disc;
 }
 
 module.exports = mongoose.model('User', UserSchema);
