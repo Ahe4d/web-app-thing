@@ -29,7 +29,6 @@ var UserSchema = new mongoose.Schema({
   },
   discord: {
     id: String,
-    token: String,
     email: String,
     name: String
   }
@@ -77,7 +76,8 @@ UserSchema.methods.getUser = async function (id) {
 
 UserSchema.methods.associateDiscord = async function (disc) {
   const user = this;
-  user.discord = disc;
+  const toSave = { id: disc._json.id, email: disc._json.email, name: disc._json.username }
+  user.discord = toSave;
   await user.save();
   return user;
 }

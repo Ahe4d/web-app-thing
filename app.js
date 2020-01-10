@@ -30,7 +30,7 @@ app.use(session({
   secret: settings.cookieSecret,
   resave: true,
   saveUninitialized: false,
-  cookie : { httpOnly: true, secure : false, maxAge : (4 * 60 * 60 * 1000)}
+  cookie: { httpOnly: true, secure : false, maxAge : (4 * 60 * 60 * 1000)}
 }));
 app.use(flash());
 app.use(function(req, res, next) {

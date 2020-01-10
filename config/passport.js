@@ -75,11 +75,11 @@ module.exports = (passport) => {
 
   passport.use('discord', new DiscordStrategy(Object.assign(opts.discord, {passReqToCallback: true}), async (req, accessToken, refreshToken, profile, done) => {
     // `profile` will be the user's Discord profile
-
     const user = await User.findOne({ username: req.user.username });
 
     // You should use that to create or update their info in your database/etc and then return the user using `done`
-    done(null, user.associateDiscord(profile))
+    const discord = await user.associateDiscord(profile)
+    done(null, discord)
   }));
 
 };

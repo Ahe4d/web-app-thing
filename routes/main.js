@@ -57,7 +57,7 @@ router.get('/logout', function (req, res, next) {
 })
 
 router.get('/test', function (req, res, done) {
-  if (!req.isAuthenticated()) return res.json([req.user, req.session])
+  if (req.isAuthenticated()) return res.json([req.user, req.session])
   else return res.send('you are auth lol')
 })
 
