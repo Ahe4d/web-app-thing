@@ -13,7 +13,6 @@ router.get('/', function (req, res, next) {
 /* Login */
 router.route('/login')
   .get(isLoggedInInv, function (req, res, next) {
-    console.log(req)
     return res.render('pages/login', { title: 'Login'});
   })
   .post(passport.authenticate('login', 
@@ -28,7 +27,6 @@ router.route('/login')
 /* Register */
 router.route('/register')
   .get(isLoggedInInv, function (req, res, next) {
-    console.log(req)
     return res.render('pages/register', { title: 'Register'});
   })
   .post(function (req, res) {

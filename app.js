@@ -102,4 +102,10 @@ app.use(function(err, req, res, next) {
   next(err);
 });
 
+// is this ok
+app.use((req, res, next) => { 
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 module.exports = app;

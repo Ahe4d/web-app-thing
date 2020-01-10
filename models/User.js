@@ -79,7 +79,7 @@ UserSchema.methods.associateDiscord = async function (disc) {
   const user = this;
   user.discord = disc;
   await user.save();
-  return disc;
+  return user;
 }
 
 module.exports = mongoose.model('User', UserSchema);
