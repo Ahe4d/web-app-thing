@@ -41,7 +41,7 @@ module.exports = (passport) => {
         const user = await User.create({ username, password, email });
         return done(null, user);
       } catch (error) {
-        done(error);
+        return done(error);
       }
   }));
 

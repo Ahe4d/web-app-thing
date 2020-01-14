@@ -25,7 +25,7 @@
 							Register
 						</div>
 						<div class="card-body">
-							<form name="loginForm" action="/api/auth/register" onSubmit="return checkPasswordConf()" method="post">
+							<form name="loginForm" action="/register" onSubmit="return checkPasswordConf()" method="post">
 								<div class="form-group row">
 									<label for="username" class="col-md-3 col-form-label"><i class="fas fa-id-card"></i> Username</label>
 									<div class="col-md-9">
@@ -57,7 +57,7 @@
 								</div>
 								<script>
 									function checkPasswordConf (pw, pwc) {
-										if (document.loginForm.password != document.loginForm.passwordConf) {
+										if (document.loginForm.elements.password.value != document.loginForm.elements.passwordConf.value) {
 											toastNotification("Passwords do not match!", "danger");
 											return false;
 										} else {

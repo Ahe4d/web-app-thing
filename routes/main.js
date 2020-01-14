@@ -29,26 +29,15 @@ router.route('/register')
   .get(isLoggedInInv, function (req, res, next) {
     return res.render('pages/register', { title: 'Register'});
   })
-  .post(function (req, res) {
-    console.log("Posting...")
-    axios.post(req.protocol + "://" + req.get('host') + '/api/auth/register', {
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password
-    })
-    .then((response) => {
-      console.log(response)
-      if (response.data.success) {
-        res.cookie('token', response.data.token)
-        req.flash('success', "Successfully registered! Welcome to the service!")
-        return res.redirect('/')
-      }
-    }, (error) => {
-      console.log(error);
-      req.flash('danger', 'There was an error while registering your account!')
-      return res.redirect('/register')
-    });
-  })
+  .post(passport.authenticate('register', 
+  {
+    failWithError: true, 
+    failureRedirect: '/register', 
+    failureFlash: "There was an error trying to register!",
+    successRedirect: '/',
+    successFlash: "Successfully registered! Welcome to the service!"
+  }))
+
 
 router.get('/logout', function (req, res, next) {
   req.logOut()
