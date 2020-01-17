@@ -21,6 +21,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.17.0",
+    "express-vue": "^5.14.1",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.2",
