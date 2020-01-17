@@ -10,6 +10,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
 var passport = require('passport');
+var expressVue = require("express-vue");
 var app = express();
 
 var mongoose = require('mongoose');
