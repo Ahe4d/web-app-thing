@@ -4,12 +4,8 @@
   "url": "https://github.com/Ahe4d/web-app-thing",
   "license": "MIT",
   "scripts": {
-    "prestart": "mongod --fork --logpath /dev/null",
     "start": "nodemon ./bin/www",
-    "poststop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
-    "pretest": "mongod --fork --logpath /dev/null",
-    "test": "mocha test",
-    "posttest": "mongo admin --eval 'db.shutdownServer()' > /dev/null"
+    "test": "mocha test"
   },
   "dependencies": {
     "@oauth-everything/passport-discord": "^1.0.2",

@@ -12,7 +12,7 @@ var app = express();
 
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://localhost/web-app-thing', { useNewUrlParser: true, useUnifiedTopology: true, promiseLibrary: require('bluebird') })
+mongoose.connect('mongodb://' + settings.mongo + '/web-app-thing', { useNewUrlParser: true, useUnifiedTopology: true, promiseLibrary: require('bluebird') })
   .then(() =>  logger.dbLogger.info('Connection successful!'))
   .catch((err) => logger.dbLogger.error(err));
 

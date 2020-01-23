@@ -1,5 +1,6 @@
 module.exports = {
   'secret': 'watthing',
   'cookieSecret': 'bruh',
-  'cookieKey': 'watSession'
+  'cookieKey': 'watSession',
+  'mongo': 'localhost'
 };
