@@ -40,7 +40,6 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use('/', express.static(path.join(__dirname, 'public')));
-app.use('/mongo_express', mongo_express(mongo_express_config))
 
 app.locals = {
   site: {
