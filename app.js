@@ -3,14 +3,11 @@ var express = require('express');
 var path = require('path'); 
 var logger = require('./logs/logger')
 var bodyParser = require('body-parser');
-var mongo_express = require('mongo-express/lib/middleware');
-var mongo_express_config = require('./config/mongogui');
 var settings = require('./config/settings');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
 var passport = require('passport');
-var expressVue = require("express-vue");
 var app = express();
 
 var mongoose = require('mongoose');
