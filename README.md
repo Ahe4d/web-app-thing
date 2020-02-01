@@ -4,9 +4,8 @@ Side project for working on a rewrite of Blockauth. Feel free to use as a boiler
 
 ## what have you got
 * Basic Bootstrap website
-* EJS templating (Vue soon?)
+* EJS templating
 * Customizable logger using Winston
-* Mongo admin panel
 * JWT cookie based auth using Passport
 * Discord OAuth
 
@@ -16,12 +15,8 @@ Side project for working on a rewrite of Blockauth. Feel free to use as a boiler
 
 Npm script | Function 
 --- | --- 
-`prestart` | Start MongoDB 
 `start` | Start web server 
-`poststop` | Stop MongoDB
-`pretest` | Same as `prestart`
 `test` | Mocha tests (unused atm)
-`posttest` | Same as `poststop`
 
 ## things to note
 At the moment I'm using CSS from [Finobe](https://finobe.com) because I'm lazy (sorry Raymonf)
