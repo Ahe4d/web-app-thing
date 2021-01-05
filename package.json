@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@oauth-everything/passport-discord": "^1.0.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bcrypt": "^3.0.6",
     "bluebird": "^3.7.0",
     "bootstrap": "^4.4.1",
