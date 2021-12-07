@@ -10,7 +10,7 @@
   "dependencies": {
     "@oauth-everything/passport-discord": "^1.0.2",
     "axios": "^0.21.2",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.7.0",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.2.2",
