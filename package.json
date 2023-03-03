@@ -22,7 +22,7 @@
     "express-vue": "^5.14.1",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "mocha": "^6.2.2",
+    "mocha": "^6.2.3",
     "mongoose": "^5.7.4",
     "nodemon": "^1.19.4",
     "passport": "^0.4.0",
